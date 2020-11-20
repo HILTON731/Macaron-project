@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -14,10 +15,12 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.kangwon.macaronproject.databinding.ActivityMemberInfoBinding;
 import com.kangwon.macaronproject.env.Env;
@@ -29,6 +32,7 @@ import java.util.Map;
 
 public class MemberInfoActivity extends BaseActivity implements View.OnClickListener {
 
+    public static Activity MemberInfoActivity;
     private static final String TAG = "MemberInfoActivity";
     private static final String REQUIRED = "Required";
     private static int CODE;
@@ -110,20 +114,26 @@ public class MemberInfoActivity extends BaseActivity implements View.OnClickList
     // [START write_user_info_out]
     private void writeNewPost(String id, String username, String phone, boolean isowner) {
 
-        String key = mDatabase.child("user-info").push().getKey();
-        Info info = new Info(id, username, phone, isowner);
-        Map<String, Object> infoValues = info.toMap();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+//        String key = mDatabase.child("users").push().getKey();///
+//        String key = "user-info";
+//        Info info = new Info(username, phone, isowner);
+        User user = new User(currentUser.getUid(), currentUser.getEmail(), username, phone, isowner);
+        Map<String, Object> infoValues = user.toMap();
 
         Map<String, Object> childUpdates = new HashMap<>();
-        childUpdates.put("/user-info/"+ id + "/" + key, infoValues);
+        childUpdates.put("/users/"+ id + "/", infoValues);///
 
         mDatabase.updateChildren(childUpdates);
     }
     // [END write_user_info_out]
 
     private void cancel(){
+        FirebaseUser user = mAuth.getCurrentUser();
         switch(CODE){
             case Env.MAIN:
+                startActivity(new Intent(MemberInfoActivity.this, MainActivity.class));
+                finish();
                 break;
             case Env.SIGNIN:
                 revoke();
@@ -136,7 +146,7 @@ public class MemberInfoActivity extends BaseActivity implements View.OnClickList
     private void revoke() {
         String user = mAuth.getCurrentUser().getUid();
         for(String table: Env.DBTABLES){
-            mDatabase.child(table).child(user).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+            mDatabase.child(Env.DBTABLES[0]).child(user).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
                     Log.d(TAG, "mDatabase:user:"+user+":delete completely");
@@ -147,18 +157,39 @@ public class MemberInfoActivity extends BaseActivity implements View.OnClickList
                     Log.d(TAG, "mDatabase:user:"+user+":delete Failed");
                 }
             });
-            mAuth.getCurrentUser().delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    Log.d(TAG, "mAuth:user:"+user+":delete completely");
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Log.d(TAG, "mAuth:user:"+user+":delete Failed");
-                }
-            });
+
+//            mDatabase.child("users").equalTo(user).addListenerForSingleValueEvent(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(DataSnapshot dataSnapshot) {
+//                    for (DataSnapshot appleSnapshot: dataSnapshot.getChildren()) {
+//                        appleSnapshot.getRef().removeValue();
+//                    }
+//                }
+//
+//                @Override
+//                public void onCancelled(DatabaseError databaseError) {
+//                    Log.e(TAG, "onCancelled", databaseError.toException());
+//                }
+//            });
         }
+        mAuth.getCurrentUser().delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(TAG, "mAuth:user:"+user+":delete completely");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, "mAuth:user:"+user+":delete Failed");
+            }
+        });
+
         finish();
     }
+    @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
+    }
+    //    private void signout() {
+//    }
 }

@@ -44,31 +44,25 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         // Click listeners
         binding.loginbuttonSignIn.setOnClickListener(this);
         binding.loginbuttonSignUp.setOnClickListener(this);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
 
         if(mAuth.getCurrentUser() != null){
             onAuthSuccess(mAuth.getCurrentUser(), false);
         }
     }
 
-
     private void onAuthSuccess(FirebaseUser user, boolean firstvisitor) {
         String username = usernameFromEmail(user.getEmail());
-
-        writeNewUser(user.getUid(), username, user.getEmail());
-
         Intent intent;
+
         if(firstvisitor) {
+            writeNewUser(user.getUid(), username, user.getEmail());
             intent = new Intent(LoginActivity.this, MemberInfoActivity.class);
         } else {
             intent = new Intent(LoginActivity.this, MainActivity.class);
         }
         intent.putExtra("from",Env.SIGNIN);
         startActivity(intent);
+//        finish();
     }
 
     private void writeNewUser(String uid, String username, String email) {

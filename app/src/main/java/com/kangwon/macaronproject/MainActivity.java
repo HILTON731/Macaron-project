@@ -2,6 +2,7 @@ package com.kangwon.macaronproject;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -35,6 +36,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
         binding.mainlogout.setOnClickListener(this);
         binding.mainupdate.setOnClickListener(this);
+
 //        binding.maintextview.setText(mDatabase.child("user-info").child(mAuth.getUid()).getDatabase().);
     }
 
@@ -42,17 +44,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public void onClick(View v) {
         int i = v.getId();
         if(i == R.id.mainlogout){
-            signout();
+            mAuth.signOut();
         } else if (i == R.id.mainupdate){
-            Intent intent = new Intent(MainActivity.this, MemberInfoActivity.class);
+            Intent intent = new Intent(getApplicationContext(),MemberInfoActivity.class);
             intent.putExtra("from", Env.MAIN);
             startActivity(intent);
-            finish();
         }
-    }
-
-    private void signout() {
-        mAuth.signOut();
         finish();
     }
+
+    @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
+    }
+    //    private void signout() {
+//    }
 }

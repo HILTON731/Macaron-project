@@ -7,7 +7,6 @@ import java.util.Map;
 
 public class Info {
 
-    public String uid;
     public String username;
     public String phone;
     public boolean isowner;
@@ -16,8 +15,7 @@ public class Info {
 
     }
 
-    public Info(String uid, String username, String phone, boolean isowner){
-        this.uid = uid;
+    public Info( String username, String phone, boolean isowner){
         this.username = username;
         this.phone = phone;
         this.isowner = isowner;
@@ -26,7 +24,6 @@ public class Info {
     @Exclude
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
-        result.put("uid",uid);
         result.put("username",username);
         result.put("phone",phone);
         result.put("isowner",isowner);
