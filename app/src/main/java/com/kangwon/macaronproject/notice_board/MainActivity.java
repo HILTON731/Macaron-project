@@ -1,4 +1,4 @@
-package com.kangwon.macaronproject.activity;
+package com.kangwon.macaronproject.notice_board;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +10,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.kangwon.macaronproject.R;
 import com.kangwon.macaronproject.databinding.ActivityMainBinding;
 import com.kangwon.macaronproject.env.Env;
+import com.kangwon.macaronproject.login.BaseActivity;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 

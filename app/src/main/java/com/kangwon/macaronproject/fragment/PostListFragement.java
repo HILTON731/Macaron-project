@@ -24,7 +24,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.Transaction;
-import com.kangwon.macaronproject.activity.PostDetailActivity;
+import com.kangwon.macaronproject.notice_board.PostDetailActivity;
 import com.kangwon.macaronproject.R;
 import com.kangwon.macaronproject.models.Post;
 import com.kangwon.macaronproject.viewholder.PostViewHolder;

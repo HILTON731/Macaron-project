@@ -1,4 +1,4 @@
-package com.kangwon.macaronproject.activity;
+package com.kangwon.macaronproject.notice_board;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import android.os.Bundle;
 
 import com.kangwon.macaronproject.databinding.ActivityNoticeBinding;
+import com.kangwon.macaronproject.login.BaseActivity;
 
 public class NoticeActivity extends BaseActivity {
 

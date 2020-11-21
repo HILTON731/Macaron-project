@@ -1,4 +1,4 @@
-package com.kangwon.macaronproject.activity;
+package com.kangwon.macaronproject.login;
 
 import androidx.annotation.NonNull;
 
@@ -20,6 +20,8 @@ import com.kangwon.macaronproject.R;
 import com.kangwon.macaronproject.databinding.ActivityLoginBinding;
 import com.kangwon.macaronproject.env.Env;
 import com.kangwon.macaronproject.models.User;
+import com.kangwon.macaronproject.notice_board.MainActivity;
+import com.kangwon.macaronproject.notice_board.MemberInfoActivity;
 
 public class LoginActivity extends BaseActivity implements View.OnClickListener {
 
