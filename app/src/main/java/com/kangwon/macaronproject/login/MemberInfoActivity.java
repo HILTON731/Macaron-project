@@ -1,4 +1,4 @@
-package com.kangwon.macaronproject.notice_board;
+package com.kangwon.macaronproject.login;
 
 import androidx.annotation.NonNull;
 
@@ -19,10 +19,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.kangwon.macaronproject.MainActivity;
 import com.kangwon.macaronproject.R;
 import com.kangwon.macaronproject.databinding.ActivityMemberInfoBinding;
 import com.kangwon.macaronproject.env.Env;
-import com.kangwon.macaronproject.login.BaseActivity;
 import com.kangwon.macaronproject.models.User;
 
 import java.util.HashMap;

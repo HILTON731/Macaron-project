@@ -1,16 +1,19 @@
-package com.kangwon.macaronproject.notice_board;
+package com.kangwon.macaronproject;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.kangwon.macaronproject.R;
 import com.kangwon.macaronproject.databinding.ActivityMainBinding;
 import com.kangwon.macaronproject.env.Env;
 import com.kangwon.macaronproject.login.BaseActivity;
+import com.kangwon.macaronproject.login.MemberInfoActivity;
+import com.kangwon.macaronproject.notice_board.NoticeActivity;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 
@@ -35,27 +38,30 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
         binding.mainlogout.setOnClickListener(this);
         binding.mainupdate.setOnClickListener(this);
+        binding.mainnotice.setOnClickListener(this);
 
-//        binding.maintextview.setText(mDatabase.child("user-info").child(mAuth.getUid()).getDatabase().);
     }
 
     @Override
     public void onClick(View v) {
         int i = v.getId();
+        System.out.println(i);
         if(i == R.id.mainlogout){
             mAuth.signOut();
         } else if (i == R.id.mainupdate){
-            Intent intent = new Intent(getApplicationContext(),MemberInfoActivity.class);
+            Intent intent = new Intent(MainActivity.this, MemberInfoActivity.class);
             intent.putExtra("from", Env.MAIN);
             startActivity(intent);
+        } else if (i == R.id.mainnotice){
+            startActivity(new Intent(MainActivity.this, NoticeActivity.class));
         }
         finish();
     }
 
-    @Override
-    public void onBackPressed() {
-//        super.onBackPressed();
-    }
+//    @Override
+//    public void onBackPressed() {
+////        super.onBackPressed();
+//    }
     //    private void signout() {
 //    }
 }

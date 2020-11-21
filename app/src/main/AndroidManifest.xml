@@ -9,19 +9,23 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MacaronProject">
-        <activity android:name=".notice_board.PostDetailActivity"></activity>
+        <activity android:name=".notice_board.NewPostActivity" />
+        <activity android:name=".notice_board.PostDetailActivity" />
         <activity android:name=".notice_board.NoticeActivity" />
-        <activity android:name=".notice_board.MemberInfoActivity" />
-        <activity android:name=".login.LoginActivity">
+
+        <activity android:name=".login.MemberInfoActivity" />
+        <activity android:name=".login.LoginActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- <activity android:name=".SignInActivity"/> -->
-        <!-- <activity android:name=".SignUpActivity" /> -->
+        </activity>
+
         <activity android:name=".login.BaseActivity" />
-        <activity android:name=".notice_board.MainActivity" android:launchMode="singleTop"/>
+        <activity
+            android:name=".MainActivity"
+            android:launchMode="singleTop" />
     </application>
 
 </manifest>

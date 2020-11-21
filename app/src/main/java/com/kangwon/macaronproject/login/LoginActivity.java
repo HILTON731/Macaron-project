@@ -16,12 +16,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.kangwon.macaronproject.MainActivity;
 import com.kangwon.macaronproject.R;
 import com.kangwon.macaronproject.databinding.ActivityLoginBinding;
 import com.kangwon.macaronproject.env.Env;
 import com.kangwon.macaronproject.models.User;
-import com.kangwon.macaronproject.notice_board.MainActivity;
-import com.kangwon.macaronproject.notice_board.MemberInfoActivity;
 
 public class LoginActivity extends BaseActivity implements View.OnClickListener {
 

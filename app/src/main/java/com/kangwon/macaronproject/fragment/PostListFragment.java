@@ -29,7 +29,7 @@ import com.kangwon.macaronproject.R;
 import com.kangwon.macaronproject.models.Post;
 import com.kangwon.macaronproject.viewholder.PostViewHolder;
 
-public abstract class PostListFragement extends Fragment {
+public abstract class PostListFragment extends Fragment {
 
     private static final String TAG = "PostListFragment";
 
@@ -39,13 +39,13 @@ public abstract class PostListFragement extends Fragment {
     private RecyclerView mRecycler;
     private LinearLayoutManager mManager;
 
-    public PostListFragement() {}
+    public PostListFragment() {}
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View rootView = inflater.inflate(R.layout.post_all_fragement, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_all_posts, container, false);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
@@ -159,7 +159,7 @@ public abstract class PostListFragement extends Fragment {
         }
     }
 
-    private String getUid() {
+    public String getUid() {
             return FirebaseAuth.getInstance().getCurrentUser().getUid();
         }
 

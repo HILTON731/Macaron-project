@@ -23,10 +23,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.kangwon.macaronproject.R;
 import com.kangwon.macaronproject.databinding.ActivityPostDetailBinding;
 import com.kangwon.macaronproject.login.BaseActivity;
+import com.kangwon.macaronproject.models.Comment;
 import com.kangwon.macaronproject.models.Post;
 import com.kangwon.macaronproject.models.User;
-
-import org.w3c.dom.Comment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -114,13 +113,24 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
         FirebaseDatabase.getInstance().getReference().child("users-info").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                // Get user information
                 User user = snapshot.getValue(User.class);
-//                String authorName = user.
+                String authorName = user.username;
+
+                // Create new comment object
+                String commentText = binding.fieldCommentText.getText().toString();
+                Comment comment  = new Comment(uid, authorName, commentText);
+
+                // Push the comment, it will appear in the list
+                mCommentsReference.push().setValue(comment);
+
+                // Clear the field
+                binding.fieldCommentText.setText(null);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                Log.w(TAG, "postComment:OnComplete:" + error);
             }
         });
     }
@@ -150,58 +160,80 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
             mContext = context;
             mDatabaseReference = ref;
 
+            // Create child event listener
+            // [START child-event_listener_recycler]
             ChildEventListener childEventListener = new ChildEventListener() {
                 @Override
                 public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String previousChildName) {
                     Log.d(TAG, "onChildAdded:" + dataSnapshot.getKey());
 
+                    // A new comment has been added, add it to the display list
                     Comment comment = dataSnapshot.getValue(Comment.class);
 
+                    // [START_EXCLUDE]
+                    // Update RecyclerView
                     mCommentIds.add(dataSnapshot.getKey());
                     mComments.add(comment);
                     notifyItemInserted(mComments.size() - 1);
+                    // [END_EXCLUDE]
                 }
 
                 @Override
                 public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String previousChildName) {
                     Log.d(TAG, "onChildChanged:" + dataSnapshot.getKey());
 
+                    // A comment has changed, use the key to determine if we are displaying this
+                    // comment and if so displayed the changed comment.
                     Comment newComment = dataSnapshot.getValue(Comment.class);
                     String commentKey = dataSnapshot.getKey();
 
+                    // [START_EXCLUDE]
                     int commentIndex = mCommentIds.indexOf(commentKey);
                     if(commentIndex > -1){
+                        // Replace with the new data
                         mComments.set(commentIndex, newComment);
 
+                        // Update the RecyclerView
                         notifyItemChanged(commentIndex);
                     } else {
                         Log.w(TAG, "onchildChanged:unknown_child:" + commentKey);
                     }
+                    // [END_EXCLUDE]
                 }
 
                 @Override
                 public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
                     Log.d(TAG, "onChildRemoved:" + dataSnapshot.getKey());
 
+                    // A comment has changed, user the key to determine if we are displaying this
+                    // comment and if so remove it.
                     String commentKey = dataSnapshot.getKey();
 
+                    // [START_EXCLUDE]
                     int commentIndex = mCommentIds.indexOf(commentKey);
                     if(commentIndex > -1) {
+                        // Remove data from the list
                         mCommentIds.remove(commentIndex);
                         mComments.remove(commentIndex);
 
+                        // Update the RecyclerView
                         notifyItemRemoved(commentIndex);
                     } else {
                         Log.w(TAG, "onChildRemoved:unknown_child" + commentKey);
                     }
+                    // [END_EXCLUDE]
                 }
 
                 @Override
                 public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String previousChildName) {
                     Log.d(TAG, "onChildMoved:" + dataSnapshot.getKey());
 
+                    // A comment has changed position, use the key to determine if we are
+                    // displaying this comment and if so move it.
                     Comment movedComment = dataSnapshot.getValue(Comment.class);
                     String commentKey = dataSnapshot.getKey();
+
+                    // ...
                 }
 
                 @Override
@@ -211,7 +243,9 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
                 }
             };
             ref.addChildEventListener(childEventListener);
+            // [END child_event_listener_recycler]
 
+            // Store reference to listener so it can be removed on app stop
             mChildEventListener = childEventListener;
         }
         @NonNull
@@ -224,15 +258,20 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
 
         @Override
         public void onBindViewHolder(@NonNull CommentViewHolder holder, int position) {
-
+            Comment comment = mComments.get(position);
+            holder.authorView.setText(comment.author);
+            holder.bodyView.setText(comment.text);
         }
 
         @Override
         public int getItemCount() {
-            return 0;
+            return mComments.size();
         }
 
         public void cleanupListener() {
+            if (mChildEventListener != null) {
+                mDatabaseReference.removeEventListener(mChildEventListener);
+            }
         }
     }
 }
