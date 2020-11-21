@@ -9,10 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MacaronProject">
-        <activity android:name=".PostDetailActivity"></activity>
-        <activity android:name=".NoticeActivity" />
-        <activity android:name=".MemberInfoActivity" />
-        <activity android:name=".LoginActivity">
+        <activity android:name=".activity.PostDetailActivity"></activity>
+        <activity android:name=".activity.NoticeActivity" />
+        <activity android:name=".activity.MemberInfoActivity" />
+        <activity android:name=".activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,8 +20,8 @@
             </intent-filter>
         </activity> <!-- <activity android:name=".SignInActivity"/> -->
         <!-- <activity android:name=".SignUpActivity" /> -->
-        <activity android:name=".BaseActivity" />
-        <activity android:name=".MainActivity" android:launchMode="singleTop"/>
+        <activity android:name=".activity.BaseActivity" />
+        <activity android:name=".activity.MainActivity" android:launchMode="singleTop"/>
     </application>
 
 </manifest>

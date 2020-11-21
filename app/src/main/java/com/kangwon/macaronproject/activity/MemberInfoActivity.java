@@ -1,8 +1,6 @@
-package com.kangwon.macaronproject;
+package com.kangwon.macaronproject.activity;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -20,11 +18,10 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.kangwon.macaronproject.R;
 import com.kangwon.macaronproject.databinding.ActivityMemberInfoBinding;
 import com.kangwon.macaronproject.env.Env;
-import com.kangwon.macaronproject.models.Info;
 import com.kangwon.macaronproject.models.User;
 
 import java.util.HashMap;

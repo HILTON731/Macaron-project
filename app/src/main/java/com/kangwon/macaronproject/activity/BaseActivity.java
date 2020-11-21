@@ -1,4 +1,4 @@
-package com.kangwon.macaronproject;
+package com.kangwon.macaronproject.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 

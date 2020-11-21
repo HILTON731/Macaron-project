@@ -1,4 +1,4 @@
-package com.kangwon.macaronproject;
+package com.kangwon.macaronproject.activity;
 
 import androidx.annotation.NonNull;
 
@@ -16,6 +16,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.kangwon.macaronproject.R;
 import com.kangwon.macaronproject.databinding.ActivityLoginBinding;
 import com.kangwon.macaronproject.env.Env;
 import com.kangwon.macaronproject.models.User;

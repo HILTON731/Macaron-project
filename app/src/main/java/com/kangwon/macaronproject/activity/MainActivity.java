@@ -1,8 +1,5 @@
-package com.kangwon.macaronproject;
+package com.kangwon.macaronproject.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -10,6 +7,7 @@ import android.view.View;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.kangwon.macaronproject.R;
 import com.kangwon.macaronproject.databinding.ActivityMainBinding;
 import com.kangwon.macaronproject.env.Env;
 

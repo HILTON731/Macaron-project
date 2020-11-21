@@ -1,13 +1,11 @@
-package com.kangwon.macaronproject;
+package com.kangwon.macaronproject.activity;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import android.os.Bundle;
 
-import com.kangwon.macaronproject.databinding.ActivityMainBinding;
 import com.kangwon.macaronproject.databinding.ActivityNoticeBinding;
 
 public class NoticeActivity extends BaseActivity {

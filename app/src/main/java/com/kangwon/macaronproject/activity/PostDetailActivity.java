@@ -1,8 +1,7 @@
-package com.kangwon.macaronproject;
+package com.kangwon.macaronproject.activity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,13 +20,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.kangwon.macaronproject.R;
 import com.kangwon.macaronproject.databinding.ActivityPostDetailBinding;
 import com.kangwon.macaronproject.models.Post;
 import com.kangwon.macaronproject.models.User;
 
 import org.w3c.dom.Comment;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
