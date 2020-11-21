@@ -1,18 +1,19 @@
 package com.kangwon.macaronproject.notice_board;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -30,7 +31,7 @@ import com.kangwon.macaronproject.models.User;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PostDetailActivity extends BaseActivity implements View.OnClickListener {
+public class PostDetailActivity extends BaseActivity implements View.OnClickListener, ItemTouchHelper.Callback {
 
     private static final String TAG = "PostDetailActivity";
 
@@ -42,109 +43,131 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
     private String mPostKey;
     private CommentAdapter mAdapter;
     private ActivityPostDetailBinding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityPostDetailBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        // Get post key from intent
         mPostKey = getIntent().getStringExtra(EXTRA_POST_KEY);
-        if (mPostKey == null){
+        if (mPostKey == null) {
             throw new IllegalArgumentException("Must pass EXTRA_POST_KEY");
         }
 
-        mPostReference = FirebaseDatabase.getInstance().getReference().child("posts").child(mPostKey);
-        mCommentsReference = FirebaseDatabase.getInstance().getReference().child("post-comments").child(mPostKey);
+        // Initialize Database
+        mPostReference = FirebaseDatabase.getInstance().getReference()
+                .child("posts").child(mPostKey);
+        mCommentsReference = FirebaseDatabase.getInstance().getReference()
+                .child("post-comments").child(mPostKey);
 
         binding.buttonPostComment.setOnClickListener(this);
         binding.recyclerPostComments.setLayoutManager(new LinearLayoutManager(this));
+
     }
 
     @Override
-    protected void onStart() {
+    public void onStart() {
         super.onStart();
 
+        // Add value event listener to the post
+        // [START post_value_event_listener]
         ValueEventListener postListener = new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Post post = snapshot.getValue(Post.class);
-
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Get Post object and use the values to update the UI
+                Post post = dataSnapshot.getValue(Post.class);
+                // [START_EXCLUDE]
                 binding.postAuthorLayout.postAuthor.setText(post.author);
                 binding.postTextLayout.postTitle.setText(post.title);
                 binding.postTextLayout.postBody.setText(post.body);
+                // [END_EXCLUDE]
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.w(TAG, "loadPost:onCancelled", error.toException());
-                Toast.makeText(PostDetailActivity.this, "Failed to load post.", Toast.LENGTH_SHORT).show();
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+                // [START_EXCLUDE]
+                Toast.makeText(PostDetailActivity.this, "Failed to load post.",
+                        Toast.LENGTH_SHORT).show();
+                // [END_EXCLUDE]
             }
         };
         mPostReference.addValueEventListener(postListener);
+        // [END post_value_event_listener]
 
+        // Keep copy of post listener so we can remove it when app stops
         mPostListener = postListener;
 
+        // Listen for comments
         mAdapter = new CommentAdapter(this, mCommentsReference);
         binding.recyclerPostComments.setAdapter(mAdapter);
     }
 
     @Override
-    protected void onStop() {
+    public void onStop() {
         super.onStop();
 
-        if (mPostListener != null){
+        // Remove post value event listener
+        if (mPostListener != null) {
             mPostReference.removeEventListener(mPostListener);
         }
 
+        // Clean up comments listener
         mAdapter.cleanupListener();
     }
 
     @Override
     public void onClick(View v) {
         int i = v.getId();
-        if(i == R.id.buttonPostComment){
+        if (i == R.id.buttonPostComment) {
             postComment();
         }
-
     }
 
     private void postComment() {
         final String uid = getUid();
-        FirebaseDatabase.getInstance().getReference().child("users-info").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                // Get user information
-                User user = snapshot.getValue(User.class);
-                String authorName = user.username;
+        FirebaseDatabase.getInstance().getReference().child("users").child(uid)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        // Get user information
+                        User user = dataSnapshot.getValue(User.class);
+                        String authorName = user.username;
 
-                // Create new comment object
-                String commentText = binding.fieldCommentText.getText().toString();
-                Comment comment  = new Comment(uid, authorName, commentText);
+                        // Create new comment object
+                        String commentText = binding.fieldCommentText.getText().toString();
+                        Comment comment = new Comment(uid, authorName, commentText);
 
-                // Push the comment, it will appear in the list
-                mCommentsReference.push().setValue(comment);
+                        // Push the comment, it will appear in the list
+                        mCommentsReference.push().setValue(comment);
 
-                // Clear the field
-                binding.fieldCommentText.setText(null);
-            }
+                        // Clear the field
+                        binding.fieldCommentText.setText(null);
+                    }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.w(TAG, "postComment:OnComplete:" + error);
-            }
-        });
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
     }
 
-    private static class CommentViewHolder extends RecyclerView.ViewHolder{
-        public TextView authorView;
-        public TextView bodyView;
+    @Override
+    public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
+        return 0;
+    }
 
-        public CommentViewHolder(@NonNull View itemView) {
-            super(itemView);
+    @Override
+    public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+        return false;
+    }
 
-            authorView = itemView.findViewById(R.id.commentAuthor);
-            bodyView = itemView.findViewById(R.id.commentBody);
-        }
+    @Override
+    public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+
     }
 
     private static class CommentAdapter extends RecyclerView.Adapter<CommentViewHolder> {
@@ -156,18 +179,18 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
         private List<String> mCommentIds = new ArrayList<>();
         private List<Comment> mComments = new ArrayList<>();
 
-        public CommentAdapter(final Context context, DatabaseReference ref){
+        public CommentAdapter(final Context context, DatabaseReference ref) {
             mContext = context;
             mDatabaseReference = ref;
 
             // Create child event listener
-            // [START child-event_listener_recycler]
+            // [START child_event_listener_recycler]
             ChildEventListener childEventListener = new ChildEventListener() {
                 @Override
-                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String previousChildName) {
+                public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
                     Log.d(TAG, "onChildAdded:" + dataSnapshot.getKey());
 
-                    // A new comment has been added, add it to the display list
+                    // A new comment has been added, add it to the displayed list
                     Comment comment = dataSnapshot.getValue(Comment.class);
 
                     // [START_EXCLUDE]
@@ -179,7 +202,7 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
                 }
 
                 @Override
-                public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String previousChildName) {
+                public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
                     Log.d(TAG, "onChildChanged:" + dataSnapshot.getKey());
 
                     // A comment has changed, use the key to determine if we are displaying this
@@ -189,29 +212,29 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
 
                     // [START_EXCLUDE]
                     int commentIndex = mCommentIds.indexOf(commentKey);
-                    if(commentIndex > -1){
+                    if (commentIndex > -1) {
                         // Replace with the new data
                         mComments.set(commentIndex, newComment);
 
                         // Update the RecyclerView
                         notifyItemChanged(commentIndex);
                     } else {
-                        Log.w(TAG, "onchildChanged:unknown_child:" + commentKey);
+                        Log.w(TAG, "onChildChanged:unknown_child:" + commentKey);
                     }
                     // [END_EXCLUDE]
                 }
 
                 @Override
-                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
                     Log.d(TAG, "onChildRemoved:" + dataSnapshot.getKey());
 
-                    // A comment has changed, user the key to determine if we are displaying this
+                    // A comment has changed, use the key to determine if we are displaying this
                     // comment and if so remove it.
                     String commentKey = dataSnapshot.getKey();
 
                     // [START_EXCLUDE]
                     int commentIndex = mCommentIds.indexOf(commentKey);
-                    if(commentIndex > -1) {
+                    if (commentIndex > -1) {
                         // Remove data from the list
                         mCommentIds.remove(commentIndex);
                         mComments.remove(commentIndex);
@@ -219,13 +242,13 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
                         // Update the RecyclerView
                         notifyItemRemoved(commentIndex);
                     } else {
-                        Log.w(TAG, "onChildRemoved:unknown_child" + commentKey);
+                        Log.w(TAG, "onChildRemoved:unknown_child:" + commentKey);
                     }
                     // [END_EXCLUDE]
                 }
 
                 @Override
-                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String previousChildName) {
+                public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
                     Log.d(TAG, "onChildMoved:" + dataSnapshot.getKey());
 
                     // A comment has changed position, use the key to determine if we are
@@ -237,9 +260,10 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
                 }
 
                 @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    Log.w(TAG, "postComments:onCancelled", error.toException());
-                    Toast.makeText(mContext, "Failed to load comments.", Toast.LENGTH_SHORT).show();
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.w(TAG, "postComments:onCancelled", databaseError.toException());
+                    Toast.makeText(mContext, "Failed to load comments.",
+                            Toast.LENGTH_SHORT).show();
                 }
             };
             ref.addChildEventListener(childEventListener);
@@ -248,20 +272,22 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
             // Store reference to listener so it can be removed on app stop
             mChildEventListener = childEventListener;
         }
-        @NonNull
+
         @Override
-        public CommentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        public CommentViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater inflater = LayoutInflater.from(mContext);
             View view = inflater.inflate(R.layout.item_comment, parent, false);
             return new CommentViewHolder(view);
         }
 
         @Override
-        public void onBindViewHolder(@NonNull CommentViewHolder holder, int position) {
+        public void onBindViewHolder(CommentViewHolder holder, int position) {
             Comment comment = mComments.get(position);
             holder.authorView.setText(comment.author);
             holder.bodyView.setText(comment.text);
+//            holder.commentView;
         }
+
 
         @Override
         public int getItemCount() {
@@ -273,5 +299,22 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
                 mDatabaseReference.removeEventListener(mChildEventListener);
             }
         }
+
+    }
+
+    private static class CommentViewHolder extends RecyclerView.ViewHolder {
+
+        public TextView authorView;
+        public TextView bodyView;
+        public RelativeLayout commentView;
+
+        public CommentViewHolder(View itemView) {
+            super(itemView);
+
+            authorView = itemView.findViewById(R.id.commentAuthor);
+            bodyView = itemView.findViewById(R.id.commentBody);
+            commentView = itemView.findViewById(R.id.commentView);
+        }
     }
 }
+

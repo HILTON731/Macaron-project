@@ -1,9 +1,5 @@
 package com.kangwon.macaronproject.notice_board;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.os.BaseBundle;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -28,7 +24,9 @@ public class NewPostActivity extends BaseActivity {
     private static final String TAG = "NewPostActivity";
     private static final String REQUIRED = "Required";
 
+    // [START declare_database_ref]
     private DatabaseReference mDatabase;
+    // [END declare_database_ref]
 
     private ActivityNewPostBinding binding;
 
@@ -48,7 +46,6 @@ public class NewPostActivity extends BaseActivity {
                 submitPost();
             }
         });
-
     }
 
     private void submitPost() {
@@ -56,57 +53,60 @@ public class NewPostActivity extends BaseActivity {
         final String body = binding.fieldBody.getText().toString();
 
         // Title is required
-        if(TextUtils.isEmpty(title)){
+        if (TextUtils.isEmpty(title)) {
             binding.fieldTitle.setError(REQUIRED);
             return;
         }
 
         // Body is required
-        if(TextUtils.isEmpty(body)){
+        if (TextUtils.isEmpty(body)) {
             binding.fieldBody.setError(REQUIRED);
             return;
         }
 
         // Disable button so there are no multi-posts
-        setEditingEnable(false);
+        setEditingEnabled(false);
         Toast.makeText(this, "Posting...", Toast.LENGTH_SHORT).show();
 
         // [START single_value_read]
         final String userId = getUid();
-        mDatabase.child("users").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                // Get user value
-                User user = snapshot.getValue(User.class);
+        mDatabase.child("users").child(userId).addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        // Get user value
+                        User user = dataSnapshot.getValue(User.class);
 
-                // [START_EXCLUDE]
-                if(user == null){
-                    // User is null, error out
-                    Log.e(TAG, "User " + userId + " is unexpectedly null");
-                    Toast.makeText(NewPostActivity.this, "ERR: could not fetch user", Toast.LENGTH_SHORT).show();
-                } else {
-                    // Write new post
-                    writeNewPost(userId, user.username, title, body);
-                }
+                        // [START_EXCLUDE]
+                        if (user == null) {
+                            // User is null, error out
+                            Log.e(TAG, "User " + userId + " is unexpectedly null");
+                            Toast.makeText(NewPostActivity.this,
+                                    "Error: could not fetch user.",
+                                    Toast.LENGTH_SHORT).show();
+                        } else {
+                            // Write new post
+                            writeNewPost(userId, user.username, title, body);
+                        }
 
-                // Finish this Activity, back to the stream
-                setEditingEnable(true);
-                finish();
-                // [END_EXCLUDE]
-            }
+                        // Finish this Activity, back to the stream
+                        setEditingEnabled(true);
+                        finish();
+                        // [END_EXCLUDE]
+                    }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.w(TAG, "getUser:onCancelled", error.toException());
-                // [START_EXCLUDE]
-                setEditingEnable(true);
-                // [END_EXCLUDE]
-            }
-        });
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.w(TAG, "getUser:onCancelled", databaseError.toException());
+                        // [START_EXCLUDE]
+                        setEditingEnabled(true);
+                        // [END_EXCLUDE]
+                    }
+                });
         // [END single_value_read]
     }
 
-    private void setEditingEnable(boolean enabled) {
+    private void setEditingEnabled(boolean enabled) {
         binding.fieldTitle.setEnabled(enabled);
         binding.fieldBody.setEnabled(enabled);
         if (enabled) {

@@ -2,17 +2,16 @@ package com.kangwon.macaronproject.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -24,9 +23,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.Transaction;
-import com.kangwon.macaronproject.notice_board.PostDetailActivity;
 import com.kangwon.macaronproject.R;
 import com.kangwon.macaronproject.models.Post;
+import com.kangwon.macaronproject.notice_board.PostDetailActivity;
 import com.kangwon.macaronproject.viewholder.PostViewHolder;
 
 public abstract class PostListFragment extends Fragment {
@@ -39,7 +38,8 @@ public abstract class PostListFragment extends Fragment {
     private RecyclerView mRecycler;
     private LinearLayoutManager mManager;
 
-    public PostListFragment() {}
+    public PostListFragment() {
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -67,7 +67,9 @@ public abstract class PostListFragment extends Fragment {
         // Set up FirebaseRecycleradapter with the Query
         Query postsQuery = getQuery(mDatabase);
 
-        FirebaseRecyclerOptions options = new FirebaseRecyclerOptions.Builder<Post>().setQuery(postsQuery, Post.class).build();
+        FirebaseRecyclerOptions options = new FirebaseRecyclerOptions.Builder<Post>()
+                .setQuery(postsQuery, Post.class)
+                .build();
 
         mAdapter = new FirebaseRecyclerAdapter<Post, PostViewHolder>(options) {
 
@@ -92,7 +94,7 @@ public abstract class PostListFragment extends Fragment {
                     }
                 });
 
-                if(model.stars.containsKey(getUid())) {
+                if (model.stars.containsKey(getUid())) {
                     holder.starView.setImageResource(R.drawable.ic_toggle_star_24);
                 } else {
                     holder.starView.setImageResource(R.drawable.ic_toggle_star_outline_24);
@@ -105,26 +107,26 @@ public abstract class PostListFragment extends Fragment {
                         DatabaseReference userPostRef = mDatabase.child("user-posts").child(model.uid).child(postRef.getKey());
 
                         onStarClicked(globalPostRef);
-                        onStarClicked(userPostRef);///
+                        onStarClicked(userPostRef);
                     }
                 });
             }
         };
 
-
+        mRecycler.setAdapter(mAdapter);
     }
 
-    private void onStarClicked(DatabaseReference postRef){
+    private void onStarClicked(DatabaseReference postRef) {
         postRef.runTransaction(new Transaction.Handler() {
             @NonNull
             @Override
             public Transaction.Result doTransaction(@NonNull MutableData currentData) {
                 Post model = currentData.getValue(Post.class);
-                if(model == null){
+                if (model == null) {
                     return Transaction.success(currentData);
                 }
 
-                if(model.stars.containsKey(getUid())){
+                if (model.stars.containsKey(getUid())) {
                     model.startCount--;
                     model.stars.remove(getUid());
                 } else {
@@ -138,7 +140,7 @@ public abstract class PostListFragment extends Fragment {
 
             @Override
             public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
-                Log.d(TAG, "postTransaction:onComplete:"+error);
+                Log.d(TAG, "postTransaction:onComplete:" + error);
             }
         });
     }
@@ -146,7 +148,7 @@ public abstract class PostListFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        if(mAdapter != null){
+        if (mAdapter != null) {
             mAdapter.startListening();
         }
     }
@@ -154,14 +156,14 @@ public abstract class PostListFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        if(mAdapter != null){
+        if (mAdapter != null) {
             mAdapter.stopListening();
         }
     }
 
     public String getUid() {
-            return FirebaseAuth.getInstance().getCurrentUser().getUid();
-        }
+        return FirebaseAuth.getInstance().getCurrentUser().getUid();
+    }
 
     public abstract Query getQuery(DatabaseReference mDatabase);
 }

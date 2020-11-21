@@ -95,7 +95,7 @@ public class MemberInfoActivity extends BaseActivity implements View.OnClickList
                     Log.d(TAG, "User " + userId + "is unexpectedly null");
                     Toast.makeText(MemberInfoActivity.this, "ERR: Could not fetch user", Toast.LENGTH_SHORT).show();
                 } else {
-                    writeNewPost(userId, username, phone, isowner);
+                    writeNewPost(username, phone, isowner);
                     startActivity(new Intent(MemberInfoActivity.this, MainActivity.class));
                     finish();
                 }
@@ -109,18 +109,27 @@ public class MemberInfoActivity extends BaseActivity implements View.OnClickList
 
     }
 
+    private String usernameFromEmail(String email) {
+        if(email.contains("@")){
+            return email.split("@")[0];
+        } else {
+            return email;
+        }
+    }
+
     // [START write_user_info_out]
-    private void writeNewPost(String id, String username, String phone, boolean isowner) {
+    private void writeNewPost(String username, String phone, boolean isowner) {
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
+        String id = usernameFromEmail(currentUser.getEmail());
 //        String key = mDatabase.child("users").push().getKey();///
 //        String key = "user-info";
 //        Info info = new Info(username, phone, isowner);
-        User user = new User(currentUser.getUid(), currentUser.getEmail(), username, phone, isowner);
+        User user = new User(id, currentUser.getEmail(), username, phone, isowner);
         Map<String, Object> infoValues = user.toMap();
 
         Map<String, Object> childUpdates = new HashMap<>();
-        childUpdates.put("/users/"+ id + "/", infoValues);///
+        childUpdates.put("/users/"+ getUid() + "/", infoValues);///
 
         mDatabase.updateChildren(childUpdates);
     }
