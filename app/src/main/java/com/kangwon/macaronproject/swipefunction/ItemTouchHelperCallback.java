@@ -151,16 +151,15 @@ public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
             public boolean onTouch(View v, MotionEvent event) {
                 swipeBack = event.getAction() == MotionEvent.ACTION_CANCEL ||
                         event.getAction() == MotionEvent.ACTION_UP;
-                if (mAuth.getCurrentUser().getUid().equals(mDatabase.child("post").getKey()))
-                    if (swipeBack) {
-                        if (dX < -buttonWidth) buttonsShowedState = ButtonsState.RIGHT_VISIBLE;
-                        else if (dX > buttonWidth) buttonsShowedState = ButtonsState.LEFT_VISIBLE;
+                if (swipeBack) {
+                    if (dX < -buttonWidth) buttonsShowedState = ButtonsState.RIGHT_VISIBLE;
+                    else if (dX > buttonWidth) buttonsShowedState = ButtonsState.LEFT_VISIBLE;
 
-                        if (buttonsShowedState != ButtonsState.GONE) {
-                            setTouchDownListener(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentAcive);
-                            setItemClickable(recyclerView, false);
-                        }
+                    if (buttonsShowedState != ButtonsState.GONE) {
+                        setTouchDownListener(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentAcive);
+                        setItemClickable(recyclerView, false);
                     }
+                }
                 return false;
             }
         });

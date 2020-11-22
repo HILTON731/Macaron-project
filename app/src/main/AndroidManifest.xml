@@ -8,13 +8,13 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MacaronProject">
+        android:theme="@style/AppTheme">
         <activity android:name=".notice_board.NewPostActivity" />
         <activity android:name=".notice_board.PostDetailActivity" />
         <activity android:name=".notice_board.NoticeActivity" />
-
+        <activity android:name=".add.inputActivity" />
         <activity android:name=".login.MemberInfoActivity" />
-        <activity android:name=".login.LoginActivity" >
+        <activity android:name=".login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
