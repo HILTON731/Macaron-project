@@ -10,11 +10,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -27,22 +27,26 @@ import com.kangwon.macaronproject.login.BaseActivity;
 import com.kangwon.macaronproject.models.Comment;
 import com.kangwon.macaronproject.models.Post;
 import com.kangwon.macaronproject.models.User;
+import com.kangwon.macaronproject.swipefunction.ItemTouchHelperCallback;
+import com.kangwon.macaronproject.swipefunction.ItemTouchHelperListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PostDetailActivity extends BaseActivity implements View.OnClickListener, ItemTouchHelper.Callback {
+public class PostDetailActivity extends BaseActivity implements View.OnClickListener {
 
     private static final String TAG = "PostDetailActivity";
 
     public static final String EXTRA_POST_KEY = "post_key";
 
     private DatabaseReference mPostReference;
+    private FirebaseAuth mAuth;
     private DatabaseReference mCommentsReference;
     private ValueEventListener mPostListener;
     private String mPostKey;
     private CommentAdapter mAdapter;
     private ActivityPostDetailBinding binding;
+    private ItemTouchHelper itemTouchHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,9 +105,14 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
         // Keep copy of post listener so we can remove it when app stops
         mPostListener = postListener;
 
+
         // Listen for comments
         mAdapter = new CommentAdapter(this, mCommentsReference);
         binding.recyclerPostComments.setAdapter(mAdapter);
+
+        // siwpe for remove or update comment
+        itemTouchHelper = new ItemTouchHelper(new ItemTouchHelperCallback(mAdapter));
+        itemTouchHelper.attachToRecyclerView(binding.recyclerPostComments);////////
     }
 
     @Override
@@ -155,22 +164,7 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
                 });
     }
 
-    @Override
-    public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
-        return 0;
-    }
-
-    @Override
-    public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-        return false;
-    }
-
-    @Override
-    public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-
-    }
-
-    private static class CommentAdapter extends RecyclerView.Adapter<CommentViewHolder> {
+    private static class CommentAdapter extends RecyclerView.Adapter<CommentViewHolder> implements ItemTouchHelperListener {
 
         private Context mContext;
         private DatabaseReference mDatabaseReference;
@@ -178,6 +172,7 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
 
         private List<String> mCommentIds = new ArrayList<>();
         private List<Comment> mComments = new ArrayList<>();
+        private FirebaseAuth mAuth;
 
         public CommentAdapter(final Context context, DatabaseReference ref) {
             mContext = context;
@@ -283,6 +278,7 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
         @Override
         public void onBindViewHolder(CommentViewHolder holder, int position) {
             Comment comment = mComments.get(position);
+            holder.itemView.setClickable(false);
             holder.authorView.setText(comment.author);
             holder.bodyView.setText(comment.text);
 //            holder.commentView;
@@ -299,6 +295,34 @@ public class PostDetailActivity extends BaseActivity implements View.OnClickList
                 mDatabaseReference.removeEventListener(mChildEventListener);
             }
         }
+
+        @Override
+        public boolean onItemMove(int from_position, int to_position) {
+
+            Comment comment = mComments.get(from_position);
+            mComments.remove(from_position);
+            mComments.add(to_position, comment);
+            notifyItemMoved(from_position, to_position);
+            return true;
+        }
+
+        @Override
+        public void onItemSwipe(int position) {
+            mComments.remove(position);
+            notifyItemRemoved(position);
+        }
+
+        @Override
+        public void onLeftClick(int position, RecyclerView.ViewHolder viewHolder) {
+
+        }
+
+        @Override
+        public void onRightClick(int position, RecyclerView.ViewHolder viewHolder) {
+            mComments.remove(position);
+            notifyItemRemoved(position);
+        }
+
 
     }
 
