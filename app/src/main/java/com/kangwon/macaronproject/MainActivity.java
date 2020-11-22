@@ -390,22 +390,6 @@ public class MainActivity extends BaseActivity {
         });
     }
 
-//    @Override
-//    public void onClick(View v) {
-//        int i = v.getId();
-//        System.out.println(i);
-//        if(i == R.id.mainlogout){
-//            mAuth.signOut();
-//        } else if (i == R.id.mainupdate){
-//            Intent intent = new Intent(MainActivity.this, MemberInfoActivity.class);
-//            intent.putExtra("from", Env.MAIN);
-//            startActivity(intent);
-//        } else if (i == R.id.mainnotice){
-//            startActivity(new Intent(MainActivity.this, NoticeActivity.class));
-//        }
-//        finish();
-//    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu); // 인플레이터로 객체화 시키기
