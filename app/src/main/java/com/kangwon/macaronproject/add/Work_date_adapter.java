@@ -14,16 +14,30 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.kangwon.macaronproject.R;
 import com.kangwon.macaronproject.swipefunction.ItemTouchHelperListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class Work_date_adapter extends RecyclerView.Adapter<Work_date_adapter.ViewHolder>
         implements ItemTouchHelperListener, OnDialogListener, OnWorkDateClickListener {
 
     private int count = 0;
+    private String date;
+
+    private Map<String, Object> workers = new HashMap<>();
+    private ArrayList<String> start_time;
+    private ArrayList<String> end_time;
+
+    private final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
 
     // 선택된 아이템을 위해서 사용
     private SparseBooleanArray mSelectedItems = new SparseBooleanArray(0);
@@ -41,6 +55,7 @@ public class Work_date_adapter extends RecyclerView.Adapter<Work_date_adapter.Vi
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
         View itemView = inflater.inflate(R.layout.date_item, viewGroup, false);
+
         return new ViewHolder(itemView, this);
         // 뷰 생성해주기
     }
@@ -64,6 +79,28 @@ public class Work_date_adapter extends RecyclerView.Adapter<Work_date_adapter.Vi
     }
 
     public void addItem(Work_date item) {
+
+        String date = item.getDateData();
+        mDatabase.child("schedule").child(date).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    String worker = dataSnapshot.child("worker").getValue(String.class);
+                    String end_time = dataSnapshot.child("end_time").getValue(String.class);
+                    String start_time = dataSnapshot.child("start_time").getValue(String.class);
+                    item.addWorker(worker);
+                    item.addwork_time(start_time + "~" + end_time);
+                    item.setWorker(worker);
+                    item.setWork_time(start_time + "~" + end_time);
+                }
+                notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(context, "someting wrong", Toast.LENGTH_SHORT).show();
+            }
+        });
         items.add(item);
     }
 
@@ -114,7 +151,7 @@ public class Work_date_adapter extends RecyclerView.Adapter<Work_date_adapter.Vi
     public boolean onItemMove(int from_position, int to_position) {
         Work_date work_date = items.get(from_position);
         items.remove(from_position);
-        items.add(to_position, work_date);
+//        items.add(to_position, work_date);
         notifyItemMoved(from_position, to_position);
         return true;
     }
@@ -153,7 +190,7 @@ public class Work_date_adapter extends RecyclerView.Adapter<Work_date_adapter.Vi
     // 오른쪽에 있는 버튼 클릭시 삭제
     @Override
     public void onRightClick(int position, RecyclerView.ViewHolder viewHolder) {
-        items.remove(position);
+        mDatabase.child("schedule").child(items.remove(position).getDateData()).removeValue();
         notifyItemRemoved(position);
     }
 
@@ -202,8 +239,10 @@ public class Work_date_adapter extends RecyclerView.Adapter<Work_date_adapter.Vi
                 public void onClick(View view) {
                     int position = getAdapterPosition();
                     toggleItemSelected(position);
-//                    Log.d("test", "position = " + position);
-//                    Toast.makeText(context, mSelectedItems.toString(), Toast.LENGTH_SHORT).show();
+/*
+                    Log.d("test", "position = " + position);
+                    Toast.makeText(context, mSelectedItems.toString(), Toast.LENGTH_SHORT).show();
+*/
                 }
             });
         }
@@ -213,16 +252,15 @@ public class Work_date_adapter extends RecyclerView.Adapter<Work_date_adapter.Vi
             textView.setText(String.valueOf(item.getYear()));
             textView2.setText(String.valueOf(item.getMonth()));
             textView3.setText(String.valueOf(item.getDate()));
-            if (count == 0) {
-                textView4.setText(String.valueOf(item.getWorker()));
-                textView5.setText(String.valueOf(item.getWork_time()));
-            } else {
-                if (!item.getWorker().equals("")) {
-                    textView4.setText(String.valueOf(item.getWorkerall()));
-                    textView5.setText(String.valueOf(item.getWork_timeall()));
-                    Toast.makeText(context, item.getWork_timeall(), Toast.LENGTH_SHORT).show();
-                }
-            }
+
+            int i = 0;
+
+            date = String.valueOf(item.getYear()) + String.valueOf(item.getMonth()) + String.valueOf(item.getDate());
+//            Toast.makeText(context, date, Toast.LENGTH_SHORT).show();
+
+            textView4.setText(item.getWorkerall());
+            textView5.setText(item.getWork_timeall());
         }
     }
 }
+

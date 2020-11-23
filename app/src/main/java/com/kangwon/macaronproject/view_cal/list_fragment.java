@@ -57,6 +57,16 @@ public class list_fragment extends Fragment {
 
         date_adapter = inputActivity.date_adapter;
 
+
+        if (date_adapter != null)
+            for (int i = date_adapter.getItemCount() - 1; i >= 0; i--) {
+                if (date_adapter.getItem(i).getWorker() == null) {
+//                    Log.d("date_adapter: removed in View", date_adapter.getItem(i).getStart_time());
+                    date_adapter.deleteItem(date_adapter.getItem(i));
+
+                }
+            }
+
         recyclerView.setAdapter(date_adapter);
         setUpRecyclerView();
         return rootView;

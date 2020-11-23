@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,11 +16,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.kangwon.macaronproject.add.inputActivity;
 import com.kangwon.macaronproject.databinding.ActivityMainBinding;
 import com.kangwon.macaronproject.decorators.EventDecorator;
@@ -50,7 +46,7 @@ import java.util.concurrent.Executors;
 // import android.util.Log;
 // import android.widget.Toast;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity_temp extends BaseActivity {
 
     int Year, Month, Day;       // 선택된 날짜 연도, 달, 일 기록하는 변수
     private final OneDayDecorator oneDayDecorator = new OneDayDecorator(); // 현재 날짜를 커스텀하기 위한 데코레이터
@@ -72,12 +68,6 @@ public class MainActivity extends BaseActivity {
     private long time = 0;
     boolean is_modify;
 
-
-    static boolean is_hidden = false;
-
-    ArrayList<String> temp = new ArrayList<>();
-    ;
-
     ActionBar actionBar;
 
     private static final String TAG = "MainActivity";
@@ -94,30 +84,32 @@ public class MainActivity extends BaseActivity {
             selected_list2 = (ArrayList<String>) getIntent().getSerializableExtra("work_data_new");
             delete_list = (ArrayList<String>) getIntent().getSerializableExtra("work_data_delete");
 
-//            if (!selected_list2.isEmpty()) {
-//                for (int i = 0; i < selected_list2.size(); i++) {
-//                    if (selected_list2.get(i) != null) {
-//                        if (!selected_list3.contains(selected_list2.get(i)))
-//                            selected_list3.add(selected_list2.get(i));
-//                    }
-//                }
-//            }
-//            int index;
-//            if (!delete_list.isEmpty()) {
-//                for (int i = 0; i < delete_list.size(); i++) {
-//                    if (delete_list.get(i) != null) {
-//                        index = selected_list3.indexOf(delete_list.get(i));
-////                        Toast.makeText(this, delete_list.get(i), Toast.LENGTH_SHORT).show();
-//                        selected_list3.remove(index);
-//                    }
-//                }
-//            }
-            new ApiSimulator(temp).executeOnExecutor(Executors.newSingleThreadExecutor());
+            if (!selected_list2.isEmpty()) {
+                for (int i = 0; i < selected_list2.size(); i++) {
+                    if (selected_list2.get(i) != null) {
+                        if (!selected_list3.contains(selected_list2.get(i)))
+                            selected_list3.add(selected_list2.get(i));
+                    }
+                }
+            }
+            int index;
+            if (!delete_list.isEmpty()) {
+                for (int i = 0; i < delete_list.size(); i++) {
+                    if (delete_list.get(i) != null) {
+                        index = selected_list3.indexOf(delete_list.get(i));
+//                        Toast.makeText(this, delete_list.get(i), Toast.LENGTH_SHORT).show();
+                        selected_list3.remove(index);
+                    }
+                }
+            }
+
+            new ApiSimulator(selected_list2).executeOnExecutor(Executors.newSingleThreadExecutor());
+
             day_list = new ArrayList<>();
 
             if (selected_list2.size() != 0) {
                 for (int i = 0; i < selected_list2.size(); i++) {
-                    String[] result = selected_list2.get(i).split("-");
+                    String[] result = selected_list2.get(i).split(",");
                     int dayy = Integer.parseInt(result[2]);
                     day_list.add(dayy);
                 }
@@ -127,20 +119,11 @@ public class MainActivity extends BaseActivity {
             add_button.setVisibility(View.GONE);
             clear_button.setVisibility(View.GONE);
             modify_button.setVisibility(View.VISIBLE);
-
-
             materialCalendarView.setSelectionMode(MaterialCalendarView.SELECTION_MODE_SINGLE);
             is_modify = true;
-
-
         } catch (Exception e) {
 
         }
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
     }
 
     @Override
@@ -154,29 +137,17 @@ public class MainActivity extends BaseActivity {
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        mDatabase.child("schedule").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    String str = dataSnapshot.getKey();
-                    temp.add(str);
-                }
-                new ApiSimulator(temp).executeOnExecutor(Executors.newSingleThreadExecutor());
+//        binding.mainlogout.setOnClickListener(this);
+//        binding.mainupdate.setOnClickListener(this);
+//        binding.mainnotice.setOnClickListener(this);
 
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-        Log.d("get value from mDatabase: ", temp.toString());
 
         materialCalendarView = findViewById(R.id.calendarView);     // 캘린더 아이디 지정
         add_button = findViewById(R.id.add_button);          // 추가 버튼
         clear_button = findViewById(R.id.clear_button);      // 선택 해제 버튼
         select_all_range = findViewById(R.id.select_range); // 범위선택 버튼
         modify_button = findViewById(R.id.modify_button);
+
 
         mode = true;
 
@@ -244,10 +215,9 @@ public class MainActivity extends BaseActivity {
 
                         String shot_Day = Year + "-" + Month + "-" + Day; // 선택한 날짜 2020,00,00 형식으로 들어감.
 
-                        if (selected) {
-                            if (!temp.contains(shot_Day))
-                                selected_list.add(shot_Day); // 만약에 선택되었다면 -> 리스트에 추가 "2020,00,00"
-                        } else selected_list.remove(shot_Day);       // 선택 해제 시 리스트에서 제거
+                        if (selected)
+                            selected_list.add(shot_Day); // 만약에 선택되었다면 -> 리스트에 추가 "2020,00,00"
+                        else selected_list.remove(shot_Day);       // 선택 해제 시 리스트에서 제거
                     }
                 }
             }
@@ -270,7 +240,7 @@ public class MainActivity extends BaseActivity {
                         Month = dates.get(i).getMonth() + 1;
                         Day = dates.get(i).getDay();
 
-                        String shot_Day = Year + "-" + Month + "-" + Day; // 선택한 날짜 2020,00,00 형식으로 들어감.
+                        String shot_Day = Year + "," + Month + "," + Day; // 선택한 날짜 2020,00,00 형식으로 들어감.
                         selected_list.add(shot_Day);
                     }
                     count++; // 범위로 선택 한번 하면 카운트 증가
@@ -287,14 +257,13 @@ public class MainActivity extends BaseActivity {
                 if (!selected_list.isEmpty()) {
                     for (int i = 0; i < selected_list.size(); i++) {
                         if (selected_list.get(i) != null)
-                            if (!temp.contains(selected_list.get(i)))
-                                temp.add(selected_list.get(i));
+                            if (!selected_list3.contains(selected_list.get(i)))
+                                selected_list3.add(selected_list.get(i));
                     }
                 }
                 Intent input_activity = new Intent(getApplicationContext(), inputActivity.class);   // 인텐트 생성
-                order_date(temp);      // 선택된 날짜 이른 날짜부터 정렬
-                input_activity.putExtra("work_data", temp);        // "work_data" 로 선택된 리스트 넘김
-
+                order_date(selected_list3);      // 선택된 날짜 이른 날짜부터 정렬
+                input_activity.putExtra("work_data", selected_list3);        // "work_data" 로 선택된 리스트 넘김
 //                input_activity.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(input_activity);
             }
@@ -392,7 +361,7 @@ public class MainActivity extends BaseActivity {
             if (isFinishing()) {
                 return;
             }
-            materialCalendarView.addDecorator(new EventDecorator(Color.RED, calendarDays, MainActivity.this));
+            materialCalendarView.addDecorator(new EventDecorator(Color.RED, calendarDays, MainActivity_temp.this));
         }
     }
 
@@ -436,14 +405,14 @@ public class MainActivity extends BaseActivity {
                 Toast.makeText(this, "캘린더", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.board:
-                startActivity(new Intent(MainActivity.this, NoticeActivity.class));
+                startActivity(new Intent(MainActivity_temp.this, NoticeActivity.class));
                 break;
             case R.id.sal:
                 Toast.makeText(this, "급여", Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.mainupdate:
-                Intent intent = new Intent(MainActivity.this, MemberInfoActivity.class);
+                Intent intent = new Intent(MainActivity_temp.this, MemberInfoActivity.class);
                 intent.putExtra("from", Env.MAIN);
                 startActivity(intent);
                 finish();

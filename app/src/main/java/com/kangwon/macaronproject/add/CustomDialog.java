@@ -14,6 +14,13 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.kangwon.macaronproject.R;
 
 import java.util.Objects;
@@ -22,6 +29,8 @@ import java.util.Objects;
  * inputActivity 에서 스와이프 하고 수정 버튼을 누르면 수행되는 클래스 (다이얼로그)
  */
 public class CustomDialog extends Dialog {
+
+    private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
 
     private OnDialogListener listener;
     private Context context;
@@ -34,6 +43,7 @@ public class CustomDialog extends Dialog {
     private String name;
     private int s_Hour, s_Minute;
     private int e_Hour, e_Minute;
+    private String uid;
     String s_time;
     String e_time;
 
@@ -53,17 +63,46 @@ public class CustomDialog extends Dialog {
         mod_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(listener != null) {
+                if (listener != null) {
                     name = mod_name.getText().toString();
 
-                    if(name.length() >= 2 && s_time != null && e_time != null) {
+
+                    if (name.length() >= 2 && s_time != null && e_time != null) {
                         date.setWorker(name);
-                        date.addWorker(name);
+//                        date.addWorker(name);
                         work_time = s_time + " ~ " + e_time;
+
+                        date.setStart_time(s_time);      // 시작시간
+                        date.setEnd_time(e_time);        // 종료시간
+
                         date.setWork_time(work_time);
-                        date.addwork_time(work_time);
-                    }
-                    else {
+//                        date.addwork_time(work_time);
+
+                        mDatabase.child("users").addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                                    String str = dataSnapshot.child("username").getValue(String.class);
+                                    if (str.equals(name)) {
+                                        uid = dataSnapshot.getKey();
+//                                        Toast.makeText(context, uid, Toast.LENGTH_SHORT).show();
+                                        break;
+                                    }
+                                }
+                                if (uid == null) {
+                                    Toast.makeText(context, "get uid Failed", Toast.LENGTH_SHORT).show();
+                                } else {
+
+                                    mDatabase.child("schedule").child(date.getDateData()).child(uid).setValue(date.toMap());
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+                    } else {
                         Toast.makeText(context, "이름을 입력하세요.", Toast.LENGTH_SHORT).show();
                         Toast.makeText(context, "시작 시간과 종료 시간을 설정 해 주세요.", Toast.LENGTH_SHORT).show();
                     }
@@ -71,6 +110,7 @@ public class CustomDialog extends Dialog {
                     listener.onFinish(position, date);
                     dismiss();
                 }
+
             }
         });
 
@@ -91,7 +131,7 @@ public class CustomDialog extends Dialog {
                     }
 
                 }, s_Hour, s_Minute, false);
-                timePickerDialog.show();                    
+                timePickerDialog.show();
             }
         });
 

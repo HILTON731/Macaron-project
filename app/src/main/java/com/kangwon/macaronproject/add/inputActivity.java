@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.DatabaseReference;
 import com.kangwon.macaronproject.MainActivity;
 import com.kangwon.macaronproject.R;
 import com.kangwon.macaronproject.swipefunction.ItemTouchHelperCallback;
@@ -30,11 +31,21 @@ public class inputActivity extends AppCompatActivity {
     Button save_button;             // 저장 버튼
     Work_date work_date;
 
+
+    private DatabaseReference mDatabase;
+
     public ArrayList<String> data;
     public ArrayList<String> data2 = new ArrayList<String>();
     public ArrayList<String> delete_data = new ArrayList<String>();
     @SuppressLint("StaticFieldLeak")
     public static Work_date_adapter date_adapter;
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setUpRecyclerView();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,14 +57,18 @@ public class inputActivity extends AppCompatActivity {
         save_button = findViewById(R.id.save);                  // 저장 버튼
 
 
-        // 리싸이클러뷰 -> 달력에서 넣은 날짜 배열 리스트로 표혀현해서 보여줌
+        // 리싸이클러뷰 -> 달력에서 넣은 날짜 배열 리스트로 표현해서 보여줌
         recyclerView = findViewById(R.id.recyclerView);
+
         // 레이아웃 지정
         LinearLayoutManager layoutManager =
                 new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
+
+
         // 어댑터 추가
         date_adapter = new Work_date_adapter(this);
+
         // 어댑터 보여주기
         recyclerView.setAdapter(date_adapter);
 
@@ -67,13 +82,16 @@ public class inputActivity extends AppCompatActivity {
         assert data != null;
         for (int i = 0; i < data.size(); i++) {
             // , 으로 구분된 날짜 하나씩 찢기
-            String[] result = data.get(i).split(",");
+            String[] result = data.get(i).split("-");
+
+
             int year = Integer.parseInt(result[0]);
             int month = Integer.parseInt(result[1]);
             int day = Integer.parseInt(result[2]);
-            String worker = day + "일 근무자";
+            String worker = null;
             work_date = new Work_date(year, month, day, worker);
-            work_date.setWork_time("근무 시간");
+            work_date.setWork_time(null);
+
             date_adapter.addItem(work_date);    // work_date 객체에  year, month, day, worker 의 값이 들어간다.
         }
 
@@ -109,11 +127,8 @@ public class inputActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                getRecentData();
-                intent.putExtra("work_data_new", data);
-                intent.putExtra("work_data_delete", delete_data);
-//                intent.setFlags((Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 startActivity(intent);
+
             }
         });
         setUpRecyclerView();
@@ -129,23 +144,11 @@ public class inputActivity extends AppCompatActivity {
         });
     }
 
-    public void getRecentData() {
-        data2.addAll(data);
-        data.clear();
-
-        for (int i = 0; i < date_adapter.items.size(); i++) {
-            data.add(date_adapter.getItem(i).year + "," + date_adapter.getItem(i).month + "," + date_adapter.getItem(i).date);
-        }
-
-        for (int i = 0; i < data2.size(); i++) {
-            if (!data.contains(data2.get(i))) {
-                delete_data.add(data2.get(i));
-            }
-        }
-    }
 
     @Override
     public void onBackPressed() {
 //        super.onBackPressed();
     }
+
+
 }
