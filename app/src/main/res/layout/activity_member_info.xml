@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="invisible"
-        style="?android:attr/progressBarStyleHorizontal"/>
+        style="?android:attr/progressBarStyleHorizontal" />
 
     <ImageView
         android:id="@+id/meminfoicon"
@@ -23,7 +23,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:layout_below="@+id/meminfoprogressBar"
-        android:src="@drawable/firebase_lockup_400" />
+        android:src="@drawable/logo_v2" />
 
     <LinearLayout
         android:id="@+id/meminfolayoutSignUp"
@@ -35,16 +35,17 @@
 
         <EditText
             android:id="@+id/meminfousername"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:gravity="center_horizontal"
             android:hint="@string/hint_your_name"
             android:inputType="text"
             android:maxLines="1" />
+
         <EditText
             android:id="@+id/meminfophoneNum"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:gravity="center_horizontal"
@@ -60,6 +61,7 @@
             android:gravity="center"
             android:text="@string/checkbox_owner"
             android:textSize="20sp"
+            android:layout_margin="10dp"
             android:maxLines="1" />
     </LinearLayout>
 
@@ -69,12 +71,17 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/meminfolayoutSignUp"
         android:layout_centerHorizontal="true"
-        android:orientation="vertical">
+        android:orientation="horizontal">
+
         <Button
             android:id="@+id/meminfoupdateBtn"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_width="150dp"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:textStyle="bold"
+            android:fontFamily="@font/fauna_one"
+            android:background="@drawable/cutom_button"
             android:layout_height="wrap_content"
             android:text="@string/sign_up" />
 
@@ -82,16 +89,25 @@
             android:id="@+id/meminforevokeBtn"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_width="150dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:fontFamily="@font/fauna_one"
+            android:background="@drawable/cutom_button"
             android:text="@string/revoke" />
 
         <Button
             android:id="@+id/meminfocancelBtn"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_width="150dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+
             android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:fontFamily="@font/fauna_one"
+            android:background="@drawable/cutom_button"
             android:text="@string/cancel" />
 
     </LinearLayout>
