@@ -10,16 +10,25 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
 
+<<<<<<< HEAD
 import com.kangwon.macaronproject.R;
 import com.kangwon.macaronproject.databinding.ActivityNoticeBinding;
 import com.kangwon.macaronproject.env.Env;
+=======
+import com.kangwon.macaronproject.MainActivity;
+import com.kangwon.macaronproject.R;
+import com.kangwon.macaronproject.databinding.ActivityNoticeBinding;
+>>>>>>> 81446d2de00a20220cc8588b699ea6dade00c2cf
 import com.kangwon.macaronproject.fragment.MyPostsFragment;
 import com.kangwon.macaronproject.fragment.MyTopPostsFragment;
 import com.kangwon.macaronproject.fragment.RecentPostFragment;
 import com.kangwon.macaronproject.login.BaseActivity;
+<<<<<<< HEAD
 import com.kangwon.macaronproject.login.LoginActivity;
 import com.kangwon.macaronproject.login.MemberInfoActivity;
 import com.kangwon.macaronproject.salary.Salary;
+=======
+>>>>>>> 81446d2de00a20220cc8588b699ea6dade00c2cf
 
 public class NoticeActivity extends BaseActivity {
 
@@ -82,6 +91,7 @@ public class NoticeActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int i = item.getItemId();
+<<<<<<< HEAD
 
         /**
          * 메뉴에서 고르면 시작하는거 수정 필요함. 게시판에서 업데이트로 가는거 환경변수 때문에 오류.
@@ -106,6 +116,13 @@ public class NoticeActivity extends BaseActivity {
             return true;
         }
         else {
+=======
+        if (i == R.id.action_logout) {
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+            return true;
+        } else {
+>>>>>>> 81446d2de00a20220cc8588b699ea6dade00c2cf
             return super.onOptionsItemSelected(item);
         }
     }

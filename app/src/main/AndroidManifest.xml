@@ -9,15 +9,25 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+<<<<<<< HEAD
         <activity android:name=".salary.Salary"></activity>
         <activity android:name=".MainActivity" />
         <activity android:name=".SplashActivity">
+=======
+        <activity android:name=".notice_board.NewPostActivity" />
+        <activity android:name=".notice_board.PostDetailActivity" />
+        <activity android:name=".notice_board.NoticeActivity" />
+        <activity android:name=".add.inputActivity" />
+        <activity android:name=".login.MemberInfoActivity" />
+        <activity android:name=".login.LoginActivity">
+>>>>>>> 81446d2de00a20220cc8588b699ea6dade00c2cf
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+<<<<<<< HEAD
         <activity android:name=".notice_board.NewPostActivity" />
         <activity android:name=".notice_board.PostDetailActivity" />
         <activity android:name=".notice_board.NoticeActivity" />
@@ -29,6 +39,13 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+=======
+
+        <activity android:name=".login.BaseActivity" />
+        <activity
+            android:name=".MainActivity"
+            android:launchMode="singleTop" />
+>>>>>>> 81446d2de00a20220cc8588b699ea6dade00c2cf
     </application>
 
 </manifest>

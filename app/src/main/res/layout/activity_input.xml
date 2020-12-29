@@ -4,7 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+<<<<<<< HEAD
     tools:ignore="HardcodedText">
+=======
+    tools:ignore="HardcodedText"
+    >
+>>>>>>> 81446d2de00a20220cc8588b699ea6dade00c2cf
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
@@ -16,11 +21,15 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+<<<<<<< HEAD
         android:background="@drawable/bg_btn"
+=======
+>>>>>>> 81446d2de00a20220cc8588b699ea6dade00c2cf
         android:gravity="center">
 
         <Button
             android:id="@+id/select_all"
+<<<<<<< HEAD
             android:fontFamily="@font/fauna_one"
             android:background="@drawable/cutom_button"
             android:layout_width="0dp"
@@ -28,11 +37,15 @@
             android:layout_weight="1"
             android:textSize="20sp"
             android:textStyle="bold"
+=======
+            android:layout_width="wrap_content"
+>>>>>>> 81446d2de00a20220cc8588b699ea6dade00c2cf
             android:layout_height="wrap_content"
             android:text="전체선택" />
 
         <Button
             android:id="@+id/delete"
+<<<<<<< HEAD
             android:layout_width="0dp"
             android:fontFamily="@font/fauna_one"
             android:layout_height="wrap_content"
@@ -41,10 +54,15 @@
             android:layout_weight="1"
             android:textSize="20sp"
             android:background="@drawable/cutom_button"
+=======
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+>>>>>>> 81446d2de00a20220cc8588b699ea6dade00c2cf
             android:text="지우기" />
 
         <Button
             android:id="@+id/save"
+<<<<<<< HEAD
             android:layout_width="0dp"
             android:fontFamily="@font/fauna_one"
             android:layout_height="wrap_content"
@@ -54,6 +72,12 @@
             android:textSize="20sp"
             android:layout_weight="1"
             android:text="일정 저장" />
+=======
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="일정 저장"
+            />
+>>>>>>> 81446d2de00a20220cc8588b699ea6dade00c2cf
 
     </LinearLayout>
 </LinearLayout>

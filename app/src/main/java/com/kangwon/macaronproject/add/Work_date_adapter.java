@@ -1,10 +1,15 @@
 package com.kangwon.macaronproject.add;
 
 import android.content.Context;
+<<<<<<< HEAD
 import android.content.Intent;
 import android.graphics.Color;
 import android.util.DisplayMetrics;
 import android.util.Log;
+=======
+import android.graphics.Color;
+import android.util.DisplayMetrics;
+>>>>>>> 81446d2de00a20220cc8588b699ea6dade00c2cf
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,7 +40,11 @@ public class Work_date_adapter extends RecyclerView.Adapter<Work_date_adapter.Vi
     private int count = 0;
     private String date;
 
+<<<<<<< HEAD
 //    public DulicateMap<String, String> workers;     ///////////////////////////////////////////////////////// 2020/12/21 수정
+=======
+    private Map<String, Object> workers = new HashMap<>();
+>>>>>>> 81446d2de00a20220cc8588b699ea6dade00c2cf
     private ArrayList<String> start_time;
     private ArrayList<String> end_time;
 
@@ -50,7 +59,10 @@ public class Work_date_adapter extends RecyclerView.Adapter<Work_date_adapter.Vi
     // context 전달
     public Work_date_adapter(Context context) {
         this.context = context;
+<<<<<<< HEAD
 //        workers = new DulicateMap<>();  ///////////////////////////////////////////////////////////////2020/12/21 수정
+=======
+>>>>>>> 81446d2de00a20220cc8588b699ea6dade00c2cf
     }
 
     @NonNull
@@ -70,11 +82,17 @@ public class Work_date_adapter extends RecyclerView.Adapter<Work_date_adapter.Vi
         viewHolder.setItem(item);
         // 아이템이 선택되었다면
         if (isItemSelected(position)) {
+<<<<<<< HEAD
             viewHolder.textView4.setTextColor(Color.MAGENTA); // 이 색으로 선택된거 배경 표시
             viewHolder.textView5.setTextColor(Color.MAGENTA); // 이 색으로 선택된거 배경 표시
         } else {
             viewHolder.textView4.setTextColor(Color.BLACK); // 이 색으로 선택된거 배경 표시
             viewHolder.textView5.setTextColor(Color.BLACK); // 이 색으로 선택된거 배경 표시
+=======
+            viewHolder.itemView.setBackgroundColor(Color.CYAN); // 이 색으로 선택된거 배경 표시
+        } else {
+            viewHolder.itemView.setBackgroundColor(Color.parseColor("#6688ff")); // 리스트의 배경 색 설정
+>>>>>>> 81446d2de00a20220cc8588b699ea6dade00c2cf
         }
     }
 
@@ -97,8 +115,11 @@ public class Work_date_adapter extends RecyclerView.Adapter<Work_date_adapter.Vi
                     item.addwork_time(start_time + "~" + end_time);
                     item.setWorker(worker);
                     item.setWork_time(start_time + "~" + end_time);
+<<<<<<< HEAD
 
 //                    workers.put(worker, split_time(start_time, end_time));              //////////////////////////////////////////2020/12/21 수정
+=======
+>>>>>>> 81446d2de00a20220cc8588b699ea6dade00c2cf
                 }
                 notifyDataSetChanged();
             }

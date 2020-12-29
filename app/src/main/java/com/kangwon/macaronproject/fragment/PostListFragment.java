@@ -23,7 +23,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.Transaction;
-import com.google.firebase.database.ValueEventListener;
 import com.kangwon.macaronproject.R;
 import com.kangwon.macaronproject.models.Post;
 import com.kangwon.macaronproject.notice_board.PostDetailActivity;
@@ -38,7 +37,7 @@ public abstract class PostListFragment extends Fragment {
     private FirebaseRecyclerAdapter<Post, PostViewHolder> mAdapter;
     private RecyclerView mRecycler;
     private LinearLayoutManager mManager;
-    private FirebaseAuth mAuth;
+
     public PostListFragment() {
     }
 
@@ -59,7 +58,7 @@ public abstract class PostListFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mAuth = FirebaseAuth.getInstance();
+
         mManager = new LinearLayoutManager(getActivity());
         mManager.setReverseLayout(true);
         mManager.setStackFromEnd(true);
@@ -67,7 +66,7 @@ public abstract class PostListFragment extends Fragment {
 
         // Set up FirebaseRecycleradapter with the Query
         Query postsQuery = getQuery(mDatabase);
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+
         FirebaseRecyclerOptions options = new FirebaseRecyclerOptions.Builder<Post>()
                 .setQuery(postsQuery, Post.class)
                 .build();
@@ -92,33 +91,6 @@ public abstract class PostListFragment extends Fragment {
                         Intent intent = new Intent(getActivity(), PostDetailActivity.class);
                         intent.putExtra(PostDetailActivity.EXTRA_POST_KEY, postKey);
                         startActivity(intent);
-                    }
-                });
-
-                holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                    String user = mAuth.getCurrentUser().getUid();
-                    Query applesQuery = ref.child("posts").orderByChild("uid").equalTo(user);
-
-                    @Override
-                    public boolean onLongClick(View v) {
-                        DatabaseReference userPostRef = mDatabase.child("user-posts").child(model.uid).child(postRef.getKey());
-                        userPostRef.removeValue();
-
-                        applesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
-                                    appleSnapshot.getRef().removeValue();
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-                                Log.e(TAG, "onCancelled", databaseError.toException());
-                            }
-                        });
-                        return true;
-
                     }
                 });
 

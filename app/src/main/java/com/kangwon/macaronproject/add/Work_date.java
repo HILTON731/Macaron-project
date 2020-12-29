@@ -18,9 +18,13 @@ public class Work_date implements Comparable<Work_date> {
     String work_time;       // 근무 시간
     String d_worker;        // 모든 근무자
     String d_work_time;     // 모든 근무 시간
+<<<<<<< HEAD
     String start_time;      // 근무 시작 시간
     String end_time;        // 근무 종료 시간
 
+=======
+    String start_time;
+>>>>>>> 81446d2de00a20220cc8588b699ea6dade00c2cf
 
     public String getStart_time() {
         return start_time;
@@ -38,6 +42,11 @@ public class Work_date implements Comparable<Work_date> {
         this.end_time = end_time;
     }
 
+<<<<<<< HEAD
+=======
+    String end_time;
+
+>>>>>>> 81446d2de00a20220cc8588b699ea6dade00c2cf
 
     public Work_date(String worker) {
         this.worker = worker;

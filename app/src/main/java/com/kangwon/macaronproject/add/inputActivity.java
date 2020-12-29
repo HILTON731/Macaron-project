@@ -16,7 +16,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.firebase.database.DatabaseReference;
 import com.kangwon.macaronproject.MainActivity;
 import com.kangwon.macaronproject.R;
+<<<<<<< HEAD
 import com.kangwon.macaronproject.env.Env;
+=======
+>>>>>>> 81446d2de00a20220cc8588b699ea6dade00c2cf
 import com.kangwon.macaronproject.swipefunction.ItemTouchHelperCallback;
 
 import java.util.ArrayList;
@@ -58,6 +61,7 @@ public class inputActivity extends AppCompatActivity {
         save_button = findViewById(R.id.save);                  // 저장 버튼
 
 
+<<<<<<< HEAD
         if(!Env.checker) {
             select_all_button.setVisibility(View.INVISIBLE);
             delete_button.setVisibility(View.INVISIBLE);
@@ -68,6 +72,8 @@ public class inputActivity extends AppCompatActivity {
             delete_button.setVisibility(View.VISIBLE);
         }
 
+=======
+>>>>>>> 81446d2de00a20220cc8588b699ea6dade00c2cf
         // 리싸이클러뷰 -> 달력에서 넣은 날짜 배열 리스트로 표현해서 보여줌
         recyclerView = findViewById(R.id.recyclerView);
 
@@ -84,11 +90,16 @@ public class inputActivity extends AppCompatActivity {
         recyclerView.setAdapter(date_adapter);
 
         // 스와이프, 터치 관련 인터페이스, 클래스 활용
+<<<<<<< HEAD
 
         if(Env.checker) {
             itemTouchHelper = new ItemTouchHelper(new ItemTouchHelperCallback(date_adapter));
             itemTouchHelper.attachToRecyclerView(recyclerView);
         }
+=======
+        itemTouchHelper = new ItemTouchHelper(new ItemTouchHelperCallback(date_adapter));
+        itemTouchHelper.attachToRecyclerView(recyclerView);
+>>>>>>> 81446d2de00a20220cc8588b699ea6dade00c2cf
 
         // 메인 엑티비티(달력) 에서 intent로 값 불러옴
         Intent intent = getIntent();
@@ -141,7 +152,10 @@ public class inputActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+<<<<<<< HEAD
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+=======
+>>>>>>> 81446d2de00a20220cc8588b699ea6dade00c2cf
                 startActivity(intent);
 
             }

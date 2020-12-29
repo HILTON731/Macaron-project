@@ -83,7 +83,11 @@ public class CustomDialog extends Dialog {
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                                     String str = dataSnapshot.child("username").getValue(String.class);
+<<<<<<< HEAD
                                     if (str != null && str.equals(name)) {
+=======
+                                    if (str.equals(name)) {
+>>>>>>> 81446d2de00a20220cc8588b699ea6dade00c2cf
                                         uid = dataSnapshot.getKey();
 //                                        Toast.makeText(context, uid, Toast.LENGTH_SHORT).show();
                                         break;
@@ -92,6 +96,10 @@ public class CustomDialog extends Dialog {
                                 if (uid == null) {
                                     Toast.makeText(context, "get uid Failed", Toast.LENGTH_SHORT).show();
                                 } else {
+<<<<<<< HEAD
+=======
+
+>>>>>>> 81446d2de00a20220cc8588b699ea6dade00c2cf
                                     mDatabase.child("schedule").child(date.getDateData()).child(uid).setValue(date.toMap());
                                 }
                             }

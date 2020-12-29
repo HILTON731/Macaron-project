@@ -12,19 +12,30 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#FFFFFF"
+<<<<<<< HEAD
         app:cardPreventCornerOverlap="false"
         app:cardUseCompatPadding="false">
+=======
+        app:cardCornerRadius="10dp"
+        app:cardUseCompatPadding="true">
+>>>>>>> 81446d2de00a20220cc8588b699ea6dade00c2cf
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+<<<<<<< HEAD
             android:background="#00B61414"
+=======
+>>>>>>> 81446d2de00a20220cc8588b699ea6dade00c2cf
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+<<<<<<< HEAD
                 android:background="@color/white"
+=======
+>>>>>>> 81446d2de00a20220cc8588b699ea6dade00c2cf
                 android:orientation="horizontal">
 
 
@@ -33,16 +44,22 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="year"
+<<<<<<< HEAD
                     android:fontFamily="@font/fauna_one"
                     android:textSize="20sp"
                     android:textColor="@color/black"
                     android:typeface="normal"
                     android:padding="5dp" />
+=======
+                    android:textSize="30sp"
+                    android:padding="10dp" />
+>>>>>>> 81446d2de00a20220cc8588b699ea6dade00c2cf
 
                 <TextView
                     android:id="@+id/month_data"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+<<<<<<< HEAD
                     android:fontFamily="@font/fauna_one"
                     android:textColor="@color/black"
                     android:textStyle="bold"
@@ -61,17 +78,28 @@
                     android:textStyle="bold"
                     android:typeface="normal" />
 
+=======
+                    android:text="month"
+                    android:textSize="30sp"
+                    android:padding="10dp" />
+>>>>>>> 81446d2de00a20220cc8588b699ea6dade00c2cf
 
                 <TextView
                     android:id="@+id/day_data"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+<<<<<<< HEAD
                     android:fontFamily="@font/fauna_one"
                     android:textColor="@color/black"
                     android:text="day"
                     android:textStyle="bold"
                     android:textSize="30sp"
                     android:padding="2dp" />
+=======
+                    android:text="day"
+                    android:textSize="30sp"
+                    android:padding="10dp" />
+>>>>>>> 81446d2de00a20220cc8588b699ea6dade00c2cf
 
             </LinearLayout>
 
@@ -80,7 +108,10 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_gravity="center"
+<<<<<<< HEAD
                 android:background="#C4B3EFE3"
+=======
+>>>>>>> 81446d2de00a20220cc8588b699ea6dade00c2cf
                 android:gravity="center">
 
                 <TextView
@@ -90,14 +121,20 @@
                     android:text="이름"
                     android:textSize="20sp"
                     android:layout_gravity="center"
+<<<<<<< HEAD
                     android:textColor="@color/black"
+=======
+>>>>>>> 81446d2de00a20220cc8588b699ea6dade00c2cf
                     android:padding="5dp" />
 
                 <TextView
                     android:id="@+id/time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+<<<<<<< HEAD
                     android:textColor="@color/black"
+=======
+>>>>>>> 81446d2de00a20220cc8588b699ea6dade00c2cf
                     android:textSize="20sp"
                     android:text="시간"
                     android:layout_gravity="center"

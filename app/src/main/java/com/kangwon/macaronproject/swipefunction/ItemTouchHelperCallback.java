@@ -102,7 +102,11 @@ public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
                     itemView.getTop() + 5,
                     itemView.getLeft() + buttonWidthWithOutPadding,
                     itemView.getBottom() - 5);
+<<<<<<< HEAD
             p.setColor(Color.parseColor("#47B6E8"));
+=======
+            p.setColor(Color.BLUE);
+>>>>>>> 81446d2de00a20220cc8588b699ea6dade00c2cf
             c.drawRoundRect(leftButton, corners, corners, p);
             drawText("추가", c, leftButton, p);
             buttionInstance = leftButton;
@@ -114,15 +118,26 @@ public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
                     itemView.getRight() - 5,
                     itemView.getBottom() - 5
             );
+<<<<<<< HEAD
             p.setColor(Color.parseColor("#D66969"));
             c.drawRoundRect(rightButton, corners, corners, p);
             drawText("삭제", c, rightButton, p);
+=======
+            p.setColor(Color.RED);
+            c.drawRoundRect(rightButton, corners, corners, p);
+            drawText("삭제", c, rightButton, p);
+
+>>>>>>> 81446d2de00a20220cc8588b699ea6dade00c2cf
             buttionInstance = rightButton;
         }
     }
 
     private void drawText(String text, Canvas c, RectF button, Paint p) {
+<<<<<<< HEAD
         float textSize = 80;
+=======
+        float textSize = 50;
+>>>>>>> 81446d2de00a20220cc8588b699ea6dade00c2cf
         p.setColor(Color.WHITE);
         p.setAntiAlias(true);
         p.setTextSize(textSize);

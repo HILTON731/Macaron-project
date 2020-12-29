@@ -12,9 +12,13 @@
         android:id="@+id/calendarView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+<<<<<<< HEAD
         app:mcv_arrowColor="@android:color/black"
         app:mcv_selectionColor="@color/colorPrimary" />
 
+=======
+        app:mcv_arrowColor="@android:color/holo_red_dark" />
+>>>>>>> 81446d2de00a20220cc8588b699ea6dade00c2cf
 
     <fragment
         android:id="@+id/list_fragment"
@@ -24,6 +28,7 @@
         android:name="com.kangwon.macaronproject.view_cal.list_fragment" />
 
     <LinearLayout
+<<<<<<< HEAD
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -39,11 +44,24 @@
             android:layout_height="match_parent"
             android:background="@drawable/cutom_button"
             android:textStyle="bold"
+=======
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:padding="10dp">
+
+        <Button
+            android:id="@+id/add_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+>>>>>>> 81446d2de00a20220cc8588b699ea6dade00c2cf
             android:text="추가"
             android:textSize="20sp" />
 
         <Button
             android:id="@+id/select_range"
+<<<<<<< HEAD
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="3dp"
@@ -63,6 +81,17 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:textStyle="bold"
+=======
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="범위 선택"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/clear_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+>>>>>>> 81446d2de00a20220cc8588b699ea6dade00c2cf
             android:text="지우기"
             android:textSize="20sp" />
 
@@ -70,7 +99,10 @@
             android:id="@+id/modify_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+<<<<<<< HEAD
             android:background="@drawable/cutom_button"
+=======
+>>>>>>> 81446d2de00a20220cc8588b699ea6dade00c2cf
             android:text="수정"
             android:visibility="gone"
             android:textSize="20sp" />

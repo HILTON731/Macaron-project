@@ -8,7 +8,12 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="orientalBlue">#6688ff</color>
+<<<<<<< HEAD
     <color name="colorPrimary">#03DAC5</color>
     <color name="colorPrimaryDark">#FF4AB1A7</color>
+=======
+    <color name="colorPrimary">#6200EE</color>
+    <color name="colorPrimaryDark">#3700B3</color>
+>>>>>>> 81446d2de00a20220cc8588b699ea6dade00c2cf
     <color name="colorAccent">#03DAC5</color>
 </resources>

@@ -36,7 +36,11 @@ public class EventDecorator implements DayViewDecorator {
     @Override
     public void decorate(DayViewFacade view) {
 //        view.setSelectionDrawable(drawable);
+<<<<<<< HEAD
         view.addSpan(new DotSpan(12, color));
+=======
+        view.addSpan(new DotSpan(10, color));
+>>>>>>> 81446d2de00a20220cc8588b699ea6dade00c2cf
 //        view.addSpan(new DotSpan(5,color)); //날짜 밑에 점.
     }
 }
