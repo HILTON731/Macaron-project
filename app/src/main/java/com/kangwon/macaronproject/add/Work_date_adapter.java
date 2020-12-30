@@ -1,10 +1,8 @@
 package com.kangwon.macaronproject.add;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,8 +23,6 @@ import com.kangwon.macaronproject.R;
 import com.kangwon.macaronproject.swipefunction.ItemTouchHelperListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 public class Work_date_adapter extends RecyclerView.Adapter<Work_date_adapter.ViewHolder>
@@ -35,7 +31,7 @@ public class Work_date_adapter extends RecyclerView.Adapter<Work_date_adapter.Vi
     private int count = 0;
     private String date;
 
-//    public DulicateMap<String, String> workers;     ///////////////////////////////////////////////////////// 2020/12/21 수정
+    //    public DulicateMap<String, String> workers;     ///////////////////////////////////////////////////////// 2020/12/21 수정
     private ArrayList<String> start_time;
     private ArrayList<String> end_time;
 
@@ -246,10 +242,6 @@ public class Work_date_adapter extends RecyclerView.Adapter<Work_date_adapter.Vi
                 public void onClick(View view) {
                     int position = getAdapterPosition();
                     toggleItemSelected(position);
-/*
-                    Log.d("test", "position = " + position);
-                    Toast.makeText(context, mSelectedItems.toString(), Toast.LENGTH_SHORT).show();
-*/
                 }
             });
         }
@@ -263,8 +255,6 @@ public class Work_date_adapter extends RecyclerView.Adapter<Work_date_adapter.Vi
             int i = 0;
 
             date = String.valueOf(item.getYear()) + String.valueOf(item.getMonth()) + String.valueOf(item.getDate());
-//            Toast.makeText(context, date, Toast.LENGTH_SHORT).show();
-
             textView4.setText(item.getWorkerall());
             textView5.setText(item.getWork_timeall());
         }

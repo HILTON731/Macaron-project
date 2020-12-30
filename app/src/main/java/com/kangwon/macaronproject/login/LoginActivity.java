@@ -15,11 +15,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.kangwon.macaronproject.MainActivity;
 import com.kangwon.macaronproject.R;
 import com.kangwon.macaronproject.databinding.ActivityLoginBinding;
@@ -53,7 +50,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         binding.loginbuttonSignIn.setOnClickListener(this);
         binding.loginbuttonSignUp.setOnClickListener(this);
 
-        if(mAuth.getCurrentUser() != null){
+        if (mAuth.getCurrentUser() != null) {
             onAuthSuccess(mAuth.getCurrentUser(), false);
         }
     }
@@ -62,15 +59,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         String username = usernameFromEmail(user.getEmail());
         Intent intent;
 
-        if(firstvisitor) {
+        if (firstvisitor) {
             writeNewUser(user.getUid(), username, user.getEmail());
             intent = new Intent(LoginActivity.this, MemberInfoActivity.class);
         } else {
             intent = new Intent(LoginActivity.this, MainActivity.class);
         }
-        intent.putExtra("from",Env.SIGNIN);
+        intent.putExtra("from", Env.SIGNIN);
         startActivity(intent);
-//        finish();
     }
 
     private void writeNewUser(String uid, String username, String email) {
@@ -80,7 +76,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     }
 
     private String usernameFromEmail(String email) {
-        if(email.contains("@")){
+        if (email.contains("@")) {
             return email.split("@")[0];
         } else {
             return email;
@@ -90,16 +86,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     @Override
     public void onClick(View v) {
         int i = v.getId();
-        if(i == R.id.loginbuttonSignIn) {
+        if (i == R.id.loginbuttonSignIn) {
             signIn();
-        } else if (i == R.id.loginbuttonSignUp){
+        } else if (i == R.id.loginbuttonSignUp) {
             signUp();
         }
     }
 
     private void signIn() {
         Log.d(TAG, "signIn");
-        if(!validateForm()){
+        if (!validateForm()) {
             return;
         }
 
@@ -113,7 +109,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 Log.d(TAG, "signIn:onComplete:" + task.isSuccessful());
                 hideProgressBar();
 
-                if(task.isSuccessful()){
+                if (task.isSuccessful()) {
                     onAuthSuccess(task.getResult().getUser(), false);
                 } else {
                     Toast.makeText(LoginActivity.this, "Sign In Failed", Toast.LENGTH_SHORT).show();
@@ -122,7 +118,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         });
     }
 
-    private void signUp(){
+    private void signUp() {
         Log.d(TAG, "signUp");
         if (!validateForm()) {
             return;
@@ -172,7 +168,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     @Override
     public void onBackPressed() {
-        //super.onBackPressed();
         if (System.currentTimeMillis() - backKeyPressedTime >= 800) {
             backKeyPressedTime = System.currentTimeMillis();
             Toast.makeText(this, "한번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show();

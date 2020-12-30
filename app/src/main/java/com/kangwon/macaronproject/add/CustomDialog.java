@@ -69,14 +69,12 @@ public class CustomDialog extends Dialog {
 
                     if (name.length() >= 2 && s_time != null && e_time != null) {
                         date.setWorker(name);
-//                        date.addWorker(name);
                         work_time = s_time + " ~ " + e_time;
 
                         date.setStart_time(s_time);      // 시작시간
                         date.setEnd_time(e_time);        // 종료시간
 
                         date.setWork_time(work_time);
-//                        date.addwork_time(work_time);
 
                         mDatabase.child("users").addValueEventListener(new ValueEventListener() {
                             @Override
@@ -85,7 +83,6 @@ public class CustomDialog extends Dialog {
                                     String str = dataSnapshot.child("username").getValue(String.class);
                                     if (str != null && str.equals(name)) {
                                         uid = dataSnapshot.getKey();
-//                                        Toast.makeText(context, uid, Toast.LENGTH_SHORT).show();
                                         break;
                                     }
                                 }
@@ -105,7 +102,6 @@ public class CustomDialog extends Dialog {
                         Toast.makeText(context, "이름을 입력하세요.", Toast.LENGTH_SHORT).show();
                         Toast.makeText(context, "시작 시간과 종료 시간을 설정 해 주세요.", Toast.LENGTH_SHORT).show();
                     }
-//                  Toast.makeText(context, date.getWorkerall(), Toast.LENGTH_SHORT).show();
                     listener.onFinish(position, date);
                     dismiss();
                 }

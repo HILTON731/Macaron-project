@@ -37,11 +37,6 @@ public class list_fragment extends Fragment {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_list, container, true);
 
         first = true;
-//        Bundle bundle = getArguments();
-
-//        if(bundle != null) {
-//            work_list = bundle.getStringArrayList("work_data");
-//        }
 
         recyclerView = rootView.findViewById(R.id.recyclerView_fragment);
         // 레이아웃 지정
@@ -49,28 +44,18 @@ public class list_fragment extends Fragment {
                 new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
 
-        // 스와이프, 터치 관련 인터페이스, 클래스 활용
-//        itemTouchHelper = new ItemTouchHelper(new ItemTouchHelperCallback(date_adapter));
-//        itemTouchHelper.attachToRecyclerView(recyclerView);
-
         // 어댑터 추가
-
         date_adapter = inputActivity.date_adapter;
-
 
         if (date_adapter != null)
             for (int i = date_adapter.getItemCount() - 1; i >= 0; i--) {
                 if (date_adapter.getItem(i).getWorker() == null) {
-//                    Log.d("date_adapter: removed in View", date_adapter.getItem(i).getStart_time());
                     date_adapter.deleteItem(date_adapter.getItem(i));
-
                 }
             }
-
         recyclerView.setAdapter(date_adapter);
         setUpRecyclerView();
         return rootView;
-
     }
 
     private void setUpRecyclerView() {
@@ -81,5 +66,4 @@ public class list_fragment extends Fragment {
             }
         });
     }
-//    public void
 }

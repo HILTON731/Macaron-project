@@ -34,7 +34,6 @@ import com.kangwon.macaronproject.env.Env;
 import com.kangwon.macaronproject.login.BaseActivity;
 import com.kangwon.macaronproject.login.LoginActivity;
 import com.kangwon.macaronproject.login.MemberInfoActivity;
-import com.kangwon.macaronproject.models.User;
 import com.kangwon.macaronproject.notice_board.NoticeActivity;
 import com.kangwon.macaronproject.salary.Salary;
 import com.kangwon.macaronproject.view_cal.list_fragment;
@@ -98,24 +97,6 @@ public class MainActivity extends BaseActivity {
             selected_list2 = (ArrayList<String>) getIntent().getSerializableExtra("work_data_new");
             delete_list = (ArrayList<String>) getIntent().getSerializableExtra("work_data_delete");
 
-//            if (!selected_list2.isEmpty()) {
-//                for (int i = 0; i < selected_list2.size(); i++) {
-//                    if (selected_list2.get(i) != null) {
-//                        if (!selected_list3.contains(selected_list2.get(i)))
-//                            selected_list3.add(selected_list2.get(i));
-//                    }
-//                }
-//            }
-//            int index;
-//            if (!delete_list.isEmpty()) {
-//                for (int i = 0; i < delete_list.size(); i++) {
-//                    if (delete_list.get(i) != null) {
-//                        index = selected_list3.indexOf(delete_list.get(i));
-////                        Toast.makeText(this, delete_list.get(i), Toast.LENGTH_SHORT).show();
-//                        selected_list3.remove(index);
-//                    }
-//                }
-//            }
             new ApiSimulator(temp).executeOnExecutor(Executors.newSingleThreadExecutor());
             day_list = new ArrayList<>();
 
@@ -160,7 +141,6 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
 
-
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(R.layout.activity_calendar);
@@ -170,16 +150,11 @@ public class MainActivity extends BaseActivity {
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-//        if(mDatabase.child("users").child(mUser.getUid()).child("isowner").getKey().equals("true")){
-//            Toast.makeText(this, "test", Toast.LENGTH_SHORT).show();
-//        }
-
         FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
         mDatabase.child("users").child(mUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Env.setOwner(snapshot.child("isowner").getValue(String.class));
-//                Log.d("hihihihi", Env.ISOWNER);
                 new ApiSimulator(temp).executeOnExecutor(Executors.newSingleThreadExecutor());
 
             }
@@ -519,6 +494,4 @@ public class MainActivity extends BaseActivity {
         }
 
     }
-    //    private void signout() {
-//    }
 }
