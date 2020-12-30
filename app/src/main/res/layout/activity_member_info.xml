@@ -71,11 +71,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/meminfolayoutSignUp"
         android:layout_centerHorizontal="true"
-<<<<<<< HEAD
         android:orientation="horizontal">
-=======
-        android:orientation="vertical">
->>>>>>> 81446d2de00a20220cc8588b699ea6dade00c2cf
 
         <Button
             android:id="@+id/meminfoupdateBtn"
